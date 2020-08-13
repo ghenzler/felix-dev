@@ -28,7 +28,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -46,6 +45,7 @@ import org.apache.felix.hc.core.impl.executor.HealthCheckExecutorThreadPool;
 import org.apache.felix.hc.core.impl.scheduling.AsyncIntervalJob;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -76,7 +76,7 @@ public class HealthCheckMonitorTest {
     @Mock
     private EventAdmin eventAdmin;
 
-    @Mock
+    @Mock(answer = Answers.CALLS_REAL_METHODS)
     private HealthCheckMonitor.Config config;
 
     @Mock
@@ -107,9 +107,9 @@ public class HealthCheckMonitorTest {
     public void before() throws ReflectiveOperationException {
         MockitoAnnotations.initMocks(this);
 
-        for (Method m : HealthCheckMonitor.Config.class.getDeclaredMethods()) {
-            when(m.invoke(config)).thenReturn(m.getDefaultValue());
-        }
+//        for (Method m : HealthCheckMonitor.Config.class.getDeclaredMethods()) {
+//            when(m.invoke(config)).thenReturn(m.getDefaultValue());
+//        }
         
         when(config.intervalInSec()).thenReturn(1000L);
         when(config.tags()).thenReturn(new String[] { TEST_TAG });
